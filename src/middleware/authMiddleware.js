@@ -1,18 +1,19 @@
-const jwt = require('jsonwebtoken');
+const { jwt } = require('../utils/libraries');
 const { JWT_SECRET } = require('../utils/envVariables');
 const responseMessages = require('../utils/responseMessages');
 
-const authMiddleware = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     const token = req.headers.authorization;
+
     if (!token) {
-        return res.status(401).json({ error: responseMessages.missingToken });
+        return res.status(401).json({ status: responseStatus.UNAUTHORIZED, error: responseMessages.MISSING_TOKEN });
     }
     try {
         jwt.verify(token.split(' ')[1], JWT_SECRET);
         next();
     } catch (error) {
-        return res.status(401).json({ error: responseMessages.invalidToken });
+        return res.status(401).json({ status: responseStatus.UNAUTHORIZED, error: responseMessages.INVALID_TOKEN });
     }
 };
 
-module.exports = authMiddleware;
+module.exports = { verifyToken };
