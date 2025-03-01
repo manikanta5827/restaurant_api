@@ -1,9 +1,9 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../../config/db.js');
+const { sequelize } = require('../../../config/db.js');
 
 const Menu = sequelize.define('Menu', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    restaurant_id: { type: DataTypes.INTEGER, allowNull: false },
+    restaurantid: { type: DataTypes.INTEGER, allowNull: false },
     name: { type: DataTypes.STRING, allowNull: false },
     price: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     description: { type: DataTypes.TEXT, defaultValue: 'No description available' },
@@ -15,4 +15,4 @@ const Menu = sequelize.define('Menu', {
     timestamps: false,
 });
 
-module.exports = Menu;
+module.exports = { Menu };

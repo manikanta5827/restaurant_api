@@ -1,12 +1,13 @@
 const { Menu } = require('../models/menuModel');
 const responseMessages = require('../../../utils/responseMessages');
 
-const fetchMenu = async (restaurantId) => {
+const fetchMenu = async (restaurantid) => {
     try {
-        const menu = await Menu.findAll({ where: { restaurantId } });
+        const menu = await Menu.findAll({ where: { restaurantid } });
         return menu;
     } catch (error) {
-        throw new Error(responseMessages.INTERNAL_SERVER_ERROR);
+        console.log(error.message);
+        throw new Error(error.message);
     }
 };
 
@@ -15,7 +16,7 @@ const addMenu = async (menuData) => {
         await Menu.bulkCreate(menuData);
         return responseMessages.SUCCESS;
     } catch (error) {
-        throw new Error(responseMessages.INTERNAL_SERVER_ERROR);
+        throw new Error(error.message);
     }
 };
 

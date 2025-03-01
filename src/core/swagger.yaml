@@ -1,0 +1,303 @@
+openapi: 3.0.0
+info:
+  title: Restaurant API
+  description: API documentation for the Restaurant project.
+  version: 1.0.0
+  contact:
+    email: thummurimanikanta7@gmail.com
+
+servers:
+  - url: http://localhost:8080
+    description: Development server
+
+tags:
+  - name: Basic
+    description: Basic system endpoints
+  - name: Menu
+    description: Menu management endpoints
+  - name: Auth
+    description: Authentication endpoints
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "failed"
+        error:
+          type: string
+          example: Error details
+
+    HealthCheck:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "success"
+        message:
+          type: string
+          example: service is healthy
+        timestamp:
+          type: string
+          format: date-time
+        checks:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [connected, disconnected]
+            server:
+              type: string
+              enum: [running]
+
+paths:
+  /:
+    get:
+      tags:
+        - Basic
+      summary: Welcome message
+      responses:
+        '200':
+          description: Welcome message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+
+  /health:
+    get:
+      tags:
+        - Basic
+      summary: Health check
+      responses:
+        '200':
+          description: API health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+
+  /api/get-menu:
+    post:
+      tags:
+        - Menu
+      summary: Retrieve all menu items
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                signature:
+                  type: string
+                data:
+                  type: object
+                  properties:
+                    restaurantid:
+                      type: number
+      responses:
+        '200':
+          description: A list of menu items retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "Success"
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        restaurantid:
+                          type: integer
+                        name:
+                          type: string
+                        price:
+                          type: string
+                        description:
+                          type: string
+                        rating:
+                          type: number
+                        preparation_time:
+                          type: integer
+                        offer_tag:
+                          type: string
+        '400':
+          description: Bad request due to missing restaurantid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized due to missing or invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/create-menu:
+    post:
+      tags:
+        - Menu
+      summary: Create new menu items
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      restaurantid:
+                        type: integer
+                      name:
+                        type: string
+                      price:
+                        type: string
+                      description:
+                        type: string
+                      rating:
+                        type: number
+                      preparation_time:
+                        type: integer
+                      offer_tag:
+                        type: string
+      responses:
+        '201':
+          description: Menu items created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "Success"
+        '400':
+          description: Bad request due to missing menu data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/generate-token:
+    post:
+      tags:
+        - Auth
+      summary: Generate a new token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Token generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  token:
+                    type: string
+        '400':
+          description: Unauthorized due to Missing credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/generate-signature:
+    post:
+      tags:
+        - Auth
+      summary: Generate a new signature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  properties:
+                    restaurantid:
+                      type: number
+      responses:
+        '200':
+          description: Signature generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  signature:
+                    type: string
+        '400':
+          description: Bad request due to missing restaurantid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

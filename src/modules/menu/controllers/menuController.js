@@ -2,28 +2,33 @@ const { fetchMenu, addMenu } = require('../services/menuServices');
 const responseMessages = require('../../../utils/responseMessages');
 
 const getMenu = async (req, res) => {
-    const { restaurantId } = req.body.data;
-    if (!restaurantId) {
+    const { restaurantid } = req.body.data;
+    if (restaurantid == 0) {
+        return res.status(400).json({ status: responseMessages.FAILED, error: 'Restaurant ID is not valid' });
+    }
+    if (!restaurantid) {
         return res.status(400).json({ status: responseMessages.FAILED, error: responseMessages.MISSING_DATA });
     }
     try {
-        const menu = await fetchMenu(restaurantId);
-        res.status(200).json({ status: responseMessages.SUCCESS, data: menu });
+        const menu = await fetchMenu(restaurantid);
+        res.status(200).json({ status: "Success", data: menu });
     } catch (error) {
-        res.status(500).json({ status: responseMessages.FAILED, error: responseMessages.INTERNAL_SERVER_ERROR });
+        console.log(error.message);
+        res.status(500).json({ status: responseMessages.FAILED, error: error.message });
     }
 }
 
 const createMenu = async (req, res) => {
-    const { menuData } = req.body.data;
-    if (!menuData) {
+    const { data } = req.body;
+    if (!data || !Array.isArray(data) || data.length === 0) {
         return res.status(400).json({ status: responseMessages.FAILED, error: responseMessages.MISSING_DATA });
     }
     try {
-        await addMenu(menuData);
-        res.status(200).json({ status: responseMessages.SUCCESS });
+        await addMenu(data);
+        res.status(201).json({ status: "Success" });
     } catch (error) {
-        res.status(500).json({ status: responseMessages.FAILED, error: responseMessages.INTERNAL_SERVER_ERROR });
+        console.log(error.message);
+        res.status(500).json({ status: responseMessages.FAILED, error: error.message });
     }
 }
 

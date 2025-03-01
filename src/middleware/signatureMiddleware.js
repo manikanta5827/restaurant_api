@@ -6,11 +6,11 @@ const verifySignature = (req, res, next) => {
     const { signature, data } = req.body;
 
     if (!signature) {
-        return res.status(400).json({ status: responseStatus.FAILED, error: responseMessages.MISSING_SIGNATURE });
+        return res.status(400).json({ status: responseMessages.FAILED, error: responseMessages.MISSING_SIGNATURE });
     }
 
     if (!data) {
-        return res.status(400).json({ status: responseStatus.FAILED, error: responseMessages.MISSING_DATA });
+        return res.status(400).json({ status: responseMessages.FAILED, error: responseMessages.MISSING_DATA });
     }
 
     const expectedSignature = crypto.createHmac('sha256', SIGNATURE_SECRET)
@@ -18,10 +18,10 @@ const verifySignature = (req, res, next) => {
         .digest('hex');
 
     if (signature !== expectedSignature) {
-        return res.status(400).json({ status: responseStatus.FAILED, error: responseMessages.INVALID_SIGNATURE });
+        return res.status(400).json({ status: responseMessages.FAILED, error: responseMessages.INVALID_SIGNATURE });
     }
 
     next();
 };
 
-module.exports = {verifySignature};
+module.exports = { verifySignature };

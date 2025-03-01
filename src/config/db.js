@@ -3,7 +3,13 @@ const { DB_URI } = require('../utils/envVariables');
 
 const sequelize = new Sequelize(DB_URI, {
     dialect: 'postgres',
-    logging: false
+    logging: false,
+    dialectOptions: {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false,
+        },
+    },
 });
 
 sequelize.authenticate().then(() => {
@@ -13,4 +19,4 @@ sequelize.authenticate().then(() => {
     process.exit(1);
 });
 
-module.exports = sequelize;
+module.exports = { sequelize };
