@@ -23,10 +23,6 @@
    ```bash
    cp .env.example .env
    ```
-   Update the `.env` file with the following:
-   ```env
-   DB_URI=postgresql://restaurent_db_user:QPEWMDr6yQLS4WHADCz7mr3ZK8fWHaiD@dpg-cv1a6ihu0jms7386m540-a.oregon-postgres.render.com/restaurent_db
-   ```
 4. **Start the Application:**
    ```bash
    npm start
@@ -184,14 +180,6 @@ rating (Float, Default: 0): Customer rating of the menu item.
 preparation_time (Integer, Default: 10 minutes): Estimated time to prepare the dish.
 
 offer_tag (String, Default: 'No Offer'): Promotional offer associated with the menu item.
-
-Database Connection
-
-The database is hosted on Render PostgreSQL. Instead of manually setting up a database, use the provided connection string:
-
-```env
-   DB_URI=postgresql://restaurent_db_user:QPEWMDr6yQLS4WHADCz7mr3ZK8fWHaiD@dpg-cv1a6ihu0jms7386m540-a.oregon-postgres.render.com/restaurent_db
-```
 
 ---
 
