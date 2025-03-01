@@ -3,7 +3,8 @@ const responseMessages = require('../utils/responseMessages');
 const { SIGNATURE_SECRET } = require('../utils/envVariables');
 
 const verifySignature = (req, res, next) => {
-    const { signature, data } = req.body;
+    const signature = req.headers['x-signature'];
+    const { data } = req.body;
 
     if (!signature) {
         return res.status(400).json({ status: responseMessages.FAILED, error: responseMessages.MISSING_SIGNATURE });

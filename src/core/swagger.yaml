@@ -97,6 +97,13 @@ paths:
       summary: Retrieve all menu items
       security:
         - BearerAuth: []
+      parameters:
+        - name: x-signature
+          in: header
+          required: true
+          description: The signature for verifying the request
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -104,13 +111,12 @@ paths:
             schema:
               type: object
               properties:
-                signature:
-                  type: string
                 data:
                   type: object
                   properties:
                     restaurantid:
-                      type: number
+                      type: integer
+                      description: The ID of the restaurant to fetch the menu for
       responses:
         '200':
           description: A list of menu items retrieved successfully
