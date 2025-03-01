@@ -7,7 +7,7 @@ info:
     email: thummurimanikanta7@gmail.com
 
 servers:
-  - url: http://localhost:8080
+  - url: https://restaurant-api-n5q9.onrender.com
     description: Development server
 
 tags:
