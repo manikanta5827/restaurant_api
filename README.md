@@ -32,6 +32,9 @@
    ```
    http://localhost:8080/api-docs
    ```
+6. **Live API Deployment:**
+You can access the deployed API at:
+[Restaurant API on Render](https://restaurant-api-n5q9.onrender.com/api-docs)
 
 ---
 
